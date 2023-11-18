@@ -5,6 +5,12 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "@/styles/Home.module.css";
 
+import { Amplify } from "aws-amplify";
+import amplifyconfig from "../src/amplifyconfiguration.json";
+Amplify.configure(amplifyconfig);
+
+const client = generateClient();
+
 // Components
 import {
     BackgroundImage1,
@@ -25,9 +31,10 @@ import QuoteGeneratorModal from "@/components/QuoteGenerator";
 // Assets
 import Clouds1 from "../assets/cloud-and-thunder.png";
 import Clouds2 from "../assets/cloudy-weather.png";
-// import { API } from 'aws-amplify'
-// import { generateAQuote, quotesQueryName } from '@/src/graphql/queries'
-// import { GraphQLResult } from '@aws-amplify/api-graphql'
+
+import { generateClient } from "aws-amplify/api";
+import { generateAQuote, quotesQueryName } from "@/src/graphql/queries";
+import { GraphQLResult } from "@aws-amplify/api-graphql";
 
 // interface for our appsync <> lambda JSON response
 interface GenerateAQuoteData {
@@ -48,19 +55,19 @@ interface UpdateQuoteInfoData {
 }
 
 // type guard for our fetch function
-// function isGraphQLResultForquotesQueryName(
-//     response: any
-// ): response is GraphQLResult<{
-//     quotesQueryName: {
-//         items: [UpdateQuoteInfoData];
-//     };
-// }> {
-//     return (
-//         response.data &&
-//         response.data.quotesQueryName &&
-//         response.data.quotesQueryName.items
-//     );
-// }
+function isGraphQLResultForquotesQueryName(
+    response: any
+): response is GraphQLResult<{
+    quotesQueryName: {
+        items: [UpdateQuoteInfoData];
+    };
+}> {
+    return (
+        response.data &&
+        response.data.quotesQueryName &&
+        response.data.quotesQueryName.items
+    );
+}
 
 export default function Home() {
     const [numberOfQuotes, setNumberOfQuotes] = useState<Number | null>(0);
@@ -69,38 +76,38 @@ export default function Home() {
     const [quoteReceived, setQuoteReceived] = useState<String | null>(null);
 
     // Function to fetch our DynamoDB object (quotes generated)
-    //   const updateQuoteInfo = async () => {
-    //     try {
-    //       const response = await API.graphql<UpdateQuoteInfoData>({
-    //         query: quotesQueryName,
-    //         authMode: "AWS_IAM",
-    //         variables: {
-    //           queryName: "LIVE",
-    //         },
-    //       })
-    //       console.log('response', response);
-    //       // setNumberOfQuotes();
 
-    //       // Create type guards
-    //       if (!isGraphQLResultForquotesQueryName(response)) {
-    //         throw new Error('Unexpected response from API.graphql');
-    //       }
+    const updateQuoteInfo = async () => {
+        try {
+            const response = await client.graphql<UpdateQuoteInfoData>({
+                query: quotesQueryName,
+                variables: {
+                    queryName: "LIVE",
+                },
+                authMode: "iam",
+            });
+            // console.log("response", response.data);
 
-    //       if (!response.data) {
-    //         throw new Error('Response data is undefined');
-    //       }
+            // Create type guards
+            if (!isGraphQLResultForquotesQueryName(response)) {
+                throw new Error("Unexpected response from API.graphql");
+            }
 
-    //       const receivedNumberOfQuotes = response.data.quotesQueryName.items[0].quotesGenerated;
-    //       setNumberOfQuotes(receivedNumberOfQuotes);
+            if (!response.data) {
+                throw new Error("Response data is undefined");
+            }
 
-    //     } catch (error) {
-    //       console.log('error getting quote data', error)
-    //     }
-    //   }
+            const receivedNumberOfQuotes =
+                response.data.quotesQueryName.items[0].quotesGenerated;
+            setNumberOfQuotes(receivedNumberOfQuotes);
+        } catch (error) {
+            console.log("error getting quote data", error);
+        }
+    };
 
-    //   useEffect(() => {
-    //     updateQuoteInfo();
-    //   }, [])
+    useEffect(() => {
+        updateQuoteInfo();
+    }, []);
 
     // Functions for quote generator modal
     const handleCloseGenerator = () => {
