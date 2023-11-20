@@ -116,45 +116,45 @@ export default function Home() {
         setQuoteReceived(null);
     };
 
-    //   const handleOpenGenerator = async (e: React.SyntheticEvent) => {
-    //     e.preventDefault();
-    //     setOpenGenerator(true);
-    //     setProcessingQuote(true);
-    //     try {
-    //       // Run Lambda Function
-    //       const runFunction = "runFunction";
-    //       const runFunctionStringified = JSON.stringify(runFunction);
-    //       const response = await API.graphql<GenerateAQuoteData>({
-    //         query: generateAQuote,
-    //         authMode: "AWS_IAM",
-    //         variables: {
-    //           input: runFunctionStringified,
-    //         },
-    //       });
-    //       const responseStringified = JSON.stringify(response);
-    //       const responseReStringified = JSON.stringify(responseStringified);
-    //       const bodyIndex = responseReStringified.indexOf("body=") + 5;
-    //       const bodyAndBase64 = responseReStringified.substring(bodyIndex);
-    //       const bodyArray = bodyAndBase64.split(",");
-    //       const body = bodyArray[0];
-    //       console.log(body);
-    //       setQuoteReceived(body);
+    const handleOpenGenerator = async (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        setOpenGenerator(true);
+        setProcessingQuote(true);
+        try {
+            //   // Run Lambda Function
+            //   const runFunction = "runFunction";
+            //   const runFunctionStringified = JSON.stringify(runFunction);
+            //   const response = await API.graphql<GenerateAQuoteData>({
+            //     query: generateAQuote,
+            //     authMode: "AWS_IAM",
+            //     variables: {
+            //       input: runFunctionStringified,
+            //     },
+            //   });
+            //   const responseStringified = JSON.stringify(response);
+            //   const responseReStringified = JSON.stringify(responseStringified);
+            //   const bodyIndex = responseReStringified.indexOf("body=") + 5;
+            //   const bodyAndBase64 = responseReStringified.substring(bodyIndex);
+            //   const bodyArray = bodyAndBase64.split(",");
+            //   const body = bodyArray[0];
+            //   console.log(body);
+            //   setQuoteReceived(body);
 
-    //       // End state:
-    //       setProcessingQuote(false);
+            //   // End state:
+            // setProcessingQuote(false);
 
-    //       // Fetch if any new quotes were generated from counter
-    //       updateQuoteInfo();
+            //   // Fetch if any new quotes were generated from counter
+            //   updateQuoteInfo();
 
-    //       // setProcessingQuote(false);
-    //       // setTimeout(() => {
-    //       //   setProcessingQuote(false);
-    //       // }, 3000);
-    //     } catch (error) {
-    //       console.log('error generating quote:', error);
-    //       setProcessingQuote(false);
-    //     }
-    //   }
+            // setProcessingQuote(false);
+            setTimeout(() => {
+                setProcessingQuote(false);
+            }, 3000);
+        } catch (error) {
+            console.log("error generating quote:", error);
+            setProcessingQuote(false);
+        }
+    };
 
     return (
         <>
@@ -203,11 +203,11 @@ export default function Home() {
                             .
                         </QuoteGeneratorSubTitle>
 
-                        {/* <GenerateQuoteButton onClick={handleOpenGenerator}>
-              <GenerateQuoteButtonText>
-                Make a Quote
-              </GenerateQuoteButtonText>
-            </GenerateQuoteButton> */}
+                        <GenerateQuoteButton onClick={handleOpenGenerator}>
+                            <GenerateQuoteButtonText>
+                                Make a Quote
+                            </GenerateQuoteButtonText>
+                        </GenerateQuoteButton>
                     </QuoteGeneratorInnerCon>
                 </QuoteGeneratorCon>
 
