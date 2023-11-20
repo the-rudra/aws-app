@@ -122,34 +122,34 @@ export default function Home() {
         setProcessingQuote(true);
         try {
             //   // Run Lambda Function
-            //   const runFunction = "runFunction";
-            //   const runFunctionStringified = JSON.stringify(runFunction);
-            //   const response = await API.graphql<GenerateAQuoteData>({
-            //     query: generateAQuote,
-            //     authMode: "AWS_IAM",
-            //     variables: {
-            //       input: runFunctionStringified,
-            //     },
-            //   });
-            //   const responseStringified = JSON.stringify(response);
-            //   const responseReStringified = JSON.stringify(responseStringified);
-            //   const bodyIndex = responseReStringified.indexOf("body=") + 5;
-            //   const bodyAndBase64 = responseReStringified.substring(bodyIndex);
-            //   const bodyArray = bodyAndBase64.split(",");
-            //   const body = bodyArray[0];
-            //   console.log(body);
-            //   setQuoteReceived(body);
+            const runFunction = "runFunction";
+            const runFunctionStringified = JSON.stringify(runFunction);
+            const response = await client.graphql<GenerateAQuoteData>({
+                query: generateAQuote,
+                authMode: "iam",
+                variables: {
+                    input: runFunctionStringified,
+                },
+            });
+            const responseStringified = JSON.stringify(response);
+            const responseReStringified = JSON.stringify(responseStringified);
+            const bodyIndex = responseReStringified.indexOf("body=") + 5;
+            const bodyAndBase64 = responseReStringified.substring(bodyIndex);
+            const bodyArray = bodyAndBase64.split(",");
+            const body = bodyArray[0];
+            console.log(body);
+            setQuoteReceived(body);
 
-            //   // End state:
+            // End state:
+            setProcessingQuote(false);
+
+            // Fetch if any new quotes were generated from counter
+            updateQuoteInfo();
+
             // setProcessingQuote(false);
-
-            //   // Fetch if any new quotes were generated from counter
-            //   updateQuoteInfo();
-
-            // setProcessingQuote(false);
-            setTimeout(() => {
-                setProcessingQuote(false);
-            }, 3000);
+            // setTimeout(() => {
+            //     setProcessingQuote(false);
+            // }, 3000);
         } catch (error) {
             console.log("error generating quote:", error);
             setProcessingQuote(false);
@@ -231,12 +231,12 @@ export default function Home() {
                         <br />
                         Developed with <RedSpan>♥</RedSpan> by{" "}
                         <FooterLink
-                            href="https://youtube.com/brianhhough"
+                            href="https://github.com/the-rudra"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             {" "}
-                            @BrianHHough{" "}
+                            @dev{" "}
                         </FooterLink>
                     </>
                 </FooterCon>
