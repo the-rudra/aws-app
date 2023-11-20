@@ -18,11 +18,17 @@
       "function": {
         "inspoquoteLambda": {
           "deploymentBucketName": "amplify-awsapp-dev-133100-deployment",
-          "s3Key": "amplify-builds/inspoquoteLambda-6d2f64447465744e7534-build.zip"
+          "s3Key": "amplify-builds/inspoquoteLambda-4e705a587967794a7970-build.zip"
         }
       },
       "api": {
         "awsapp": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2xnzzk0h4ua84",
+          "type": "cicd"
+        }
       }
     }
   }
